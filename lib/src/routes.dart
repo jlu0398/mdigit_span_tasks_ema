@@ -4,7 +4,7 @@ import 'package:mdigit_span_tasks_ema/src/demographics/end_demographics_survey.d
 import 'package:mdigit_span_tasks_ema/src/ema/ema_screen.dart';
 import 'package:mdigit_span_tasks_ema/src/informed_consent/consent_screen.dart';
 import 'package:mdigit_span_tasks_ema/src/notifications/view/notification_permission_screen.dart';
-import 'package:mdigit_span_tasks_ema/src/task_list/view/task_list_page.dart';
+import 'package:mdigit_span_tasks_ema/src/task_list/view/pages/task_list_page.dart';
 import 'package:mdigit_span_tasks_ema/src/ui_components/loading_screen.dart';
 
 import 'surveys/demographics_survey.dart';
