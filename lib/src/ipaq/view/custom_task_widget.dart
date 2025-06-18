@@ -47,7 +47,7 @@ class _CustomTaskWidgetState extends State<CustomTaskWidget> {
     if (_currentStepIndex > 0) {
       setState(() {
         _currentStepIndex--;
-        _currentAnswer = null; // Optional: clear answer
+        _currentAnswer = null;
       });
     }
   }

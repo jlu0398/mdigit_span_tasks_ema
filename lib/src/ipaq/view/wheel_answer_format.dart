@@ -26,7 +26,7 @@ class WheelQuestionBody extends StatefulWidget {
 class _WheelQuestionBodyState extends State<WheelQuestionBody> {
   void _feedback() {
     SystemSound.play(SystemSoundType.click);
-    HapticFeedback.heavyImpact(); // 🔁 Stronger vibration
+    HapticFeedback.heavyImpact();
   }
 
   @override
@@ -48,7 +48,7 @@ class _WheelQuestionBodyState extends State<WheelQuestionBody> {
         ),
         onSelectedItemChanged: (index) {
           widget.onResultChange(widget.answerFormat.choices[index]);
-          _feedback(); // 🔊 + 🤏
+          _feedback();
         },
         children: List.generate(
           widget.answerFormat.choices.length,

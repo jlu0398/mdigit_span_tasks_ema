@@ -38,7 +38,7 @@ class _CustomDurationPickerState extends State<CustomDurationPicker> {
 
   void _feedback() {
     SystemSound.play(SystemSoundType.click);
-    HapticFeedback.heavyImpact(); // 💥 Strong feedback
+    HapticFeedback.heavyImpact();
   }
 
   @override
@@ -49,7 +49,7 @@ class _CustomDurationPickerState extends State<CustomDurationPicker> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _buildPicker(
-            label: 'Hours',
+            label: 'Horas',
             value: selectedHours,
             max: widget.maxHours,
             onChanged: (index) {
@@ -60,7 +60,7 @@ class _CustomDurationPickerState extends State<CustomDurationPicker> {
           ),
           const Text(":", style: TextStyle(fontSize: 35)),
           _buildPicker(
-            label: 'Minutes',
+            label: 'Minutos',
             value: selectedMinutes,
             max: widget.maxMinutes,
             onChanged: (index) {
