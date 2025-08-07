@@ -22,12 +22,12 @@ class CustomTaskWidget extends StatefulWidget {
 class _CustomTaskWidgetState extends State<CustomTaskWidget> {
   int _currentStepIndex = 0;
   final RPTaskResult _taskResult = RPTaskResult(identifier: 'custom_task');
-  dynamic _currentAnswer;
+  Object? _currentAnswer;
 
   void _nextStep() {
     final currentStep = widget.task.steps[_currentStepIndex];
 
-    final stepResult = CustomAnswerResult(
+    final stepResult = CustomAnswerResult<Object?>(
       identifier: currentStep.identifier,
       answer: _currentAnswer,
     );
@@ -52,63 +52,46 @@ class _CustomTaskWidgetState extends State<CustomTaskWidget> {
     }
   }
 
+  Widget _buildStepWidget(RPStep step) {
+    if (step is RPInstructionStep) {
+      return _InstructionStep(step: step);
+    } else if (step is RPQuestionStep &&
+        step.answerFormat is DurationAnswerFormat) {
+      return _DurationQuestionStep(
+        step: step,
+        onChanged: (val) => setState(() => _currentAnswer = val),
+      );
+    } else if (step is RPQuestionStep &&
+        step.answerFormat is wheel.WheelAnswerFormat) {
+      return _WheelQuestionStep(
+        step: step,
+        onChanged: (val) => setState(() => _currentAnswer = val),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
   @override
   Widget build(BuildContext context) {
     final step = widget.task.steps[_currentStepIndex];
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            step is RPInstructionStep
-                ? step.title
-                : 'Pregunta $_currentStepIndex',
-            style: const TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
-            textAlign: TextAlign.center,
-          ),
-          backgroundColor: const Color.fromARGB(255, 217, 217, 217)),
+        title: Text(
+          step is RPInstructionStep
+              ? step.title
+              : 'Pregunta $_currentStepIndex',
+          style: const TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: const Color.fromARGB(255, 217, 217, 217),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (step is RPInstructionStep) ...[
-              Text(
-                step.detailText ?? '',
-                style: const TextStyle(fontSize: 25),
-                textAlign: TextAlign.left,
-              ),
-            ] else if (step is RPQuestionStep &&
-                step.answerFormat is DurationAnswerFormat) ...[
-              Text(
-                step.title,
-                style:
-                    const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.left,
-              ),
-              CustomRPUIDateTimeQuestionBody(
-                key: ValueKey(step.identifier),
-                answerFormat: step.answerFormat as DurationAnswerFormat,
-                onResultChange: (val) {
-                  setState(() => _currentAnswer = val);
-                },
-              ),
-            ] else if (step is RPQuestionStep &&
-                step.answerFormat is wheel.WheelAnswerFormat) ...[
-              Text(
-                step.title,
-                style:
-                    const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.left,
-              ),
-              wheel.WheelQuestionBody(
-                answerFormat: step.answerFormat as wheel.WheelAnswerFormat,
-                onResultChange: (val) {
-                  setState(() {
-                    _currentAnswer = val;
-                  });
-                },
-              ),
-            ],
+            _buildStepWidget(step),
             Row(
               children: [
                 Expanded(
@@ -156,6 +139,77 @@ class _CustomTaskWidgetState extends State<CustomTaskWidget> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _InstructionStep extends StatelessWidget {
+  final RPInstructionStep step;
+  const _InstructionStep({required this.step});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      step.detailText ?? '',
+      style: const TextStyle(fontSize: 25),
+      textAlign: TextAlign.left,
+    );
+  }
+}
+
+class _DurationQuestionStep extends StatelessWidget {
+  final RPQuestionStep step;
+  final ValueChanged<Object?> onChanged;
+
+  const _DurationQuestionStep({
+    required this.step,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          step.title,
+          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.left,
+        ),
+        CustomRPUIDateTimeQuestionBody(
+          key: ValueKey(step.identifier),
+          answerFormat: step.answerFormat as DurationAnswerFormat,
+          onResultChange: onChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _WheelQuestionStep extends StatelessWidget {
+  final RPQuestionStep step;
+  final ValueChanged<Object?> onChanged;
+
+  const _WheelQuestionStep({
+    required this.step,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          step.title,
+          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.left,
+        ),
+        wheel.WheelQuestionBody(
+          answerFormat: step.answerFormat as wheel.WheelAnswerFormat,
+          onResultChange: onChanged,
+        ),
+      ],
     );
   }
 }

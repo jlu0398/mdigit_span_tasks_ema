@@ -1,9 +1,12 @@
-import 'package:research_package/research_package.dart';
 import 'package:mdigits/src/ipaq/model/items.dart';
+import 'package:research_package/research_package.dart';
 
 class IPAQViewModel {
-  RPOrderedTask get task => RPOrderedTask(
-        identifier: 'ipaq_task',
-        steps: ipaqSteps,
-      );
+  final RPOrderedTask task;
+
+  IPAQViewModel()
+      : task = RPOrderedTask(
+          identifier: 'ipaq_task',
+          steps: ipaqSteps,
+        );
 }

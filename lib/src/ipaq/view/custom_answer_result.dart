@@ -1,7 +1,7 @@
 import 'package:research_package/model.dart';
 
-class CustomAnswerResult extends RPResult {
-  final dynamic answer;
+class CustomAnswerResult<T> extends RPResult {
+  final T? answer;
 
   CustomAnswerResult({
     required String identifier,
