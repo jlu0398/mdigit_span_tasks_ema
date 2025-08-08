@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mdigits/src/ipaq/view/wheel_answer_format.dart' as wheel;
 import 'package:research_package/model.dart';
+import 'package:mdigits/src/ipaq/view/wheel_answer_format.dart' as wheel;
 import 'custom_duration_question_body.dart';
 import 'duration_answer_format.dart';
 import 'custom_answer_result.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/mdi.dart';
+import 'package:mdigits/src/ipaq/model/items.dart';
 
 class CustomTaskWidget extends StatefulWidget {
   final RPOrderedTask task;
@@ -31,7 +34,10 @@ class _CustomTaskWidgetState extends State<CustomTaskWidget> {
       identifier: currentStep.identifier,
       answer: _currentAnswer,
     );
-    _taskResult.setStepResultForIdentifier(currentStep.identifier, stepResult);
+    _taskResult.setStepResultForIdentifier(
+      currentStep.identifier,
+      stepResult,
+    );
     _currentAnswer = null;
 
     if (_currentStepIndex + 1 >= widget.task.steps.length) {
@@ -58,14 +64,15 @@ class _CustomTaskWidgetState extends State<CustomTaskWidget> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            step is RPInstructionStep
-                ? step.title
-                : 'Pregunta $_currentStepIndex',
-            style: const TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
-            textAlign: TextAlign.center,
-          ),
-          backgroundColor: const Color.fromARGB(255, 217, 217, 217)),
+        title: Text(
+          step is RPInstructionStep
+              ? step.title
+              : 'Pregunta $_currentStepIndex',
+          style: const TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: const Color.fromARGB(255, 217, 217, 217),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
@@ -79,11 +86,9 @@ class _CustomTaskWidgetState extends State<CustomTaskWidget> {
               ),
             ] else if (step is RPQuestionStep &&
                 step.answerFormat is DurationAnswerFormat) ...[
-              Text(
-                step.title,
-                style:
-                    const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.left,
+              _QuestionTitleWithIcon(
+                title: step.title,
+                identifier: step.identifier,
               ),
               CustomRPUIDateTimeQuestionBody(
                 key: ValueKey(step.identifier),
@@ -94,11 +99,9 @@ class _CustomTaskWidgetState extends State<CustomTaskWidget> {
               ),
             ] else if (step is RPQuestionStep &&
                 step.answerFormat is wheel.WheelAnswerFormat) ...[
-              Text(
-                step.title,
-                style:
-                    const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.left,
+              _QuestionTitleWithIcon(
+                title: step.title,
+                identifier: step.identifier,
               ),
               wheel.WheelQuestionBody(
                 answerFormat: step.answerFormat as wheel.WheelAnswerFormat,
@@ -156,6 +159,62 @@ class _CustomTaskWidgetState extends State<CustomTaskWidget> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _QuestionTitleWithIcon extends StatelessWidget {
+  final String title;
+  final String identifier;
+
+  const _QuestionTitleWithIcon({
+    Key? key,
+    required this.title,
+    required this.identifier,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final String iconName = questionIcons[identifier] ?? Mdi.help_circle;
+    final Color color = questionIconColors[identifier] ?? Colors.blueAccent;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 84,
+          height: 84,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(42),
+            border: Border.all(color: color.withOpacity(0.35), width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Iconify(
+              iconName,
+              size: 46,
+              color: color,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.w700,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+      ],
     );
   }
 }

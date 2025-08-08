@@ -11,7 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  iconify_flutter: ^0.0.7
+
   cupertino_icons: ^1.0.2
+
+  cognition_package: 1.6.0
+
+  fl_chart: ^0.68.0
   get: ^4.6.5
   digit_span_tasks:
     git:
@@ -26,7 +32,6 @@ dependencies:
   firebase_auth: ^4.19.0
   flutter_local_notifications: ^17.0.0
   firebase_messaging: ^14.8.1
-  # research_package: ^1.5.0
   research_package:
     git:
       url: https://github.com/mario-bermonti/research.package.git
@@ -68,3 +73,9 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/app_icon.png"
+
+dependency_overrides:
+  research_package:
+    git:
+      url: https://github.com/mario-bermonti/research.package.git
+      ref: 90829448e20fa72ce34ee740dac25849078cb2de
