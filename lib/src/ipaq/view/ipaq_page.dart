@@ -11,7 +11,9 @@ class IPAQPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomTaskWidget(
       task: viewModel.task,
-      onSubmit: (result) {},
+      onSubmit: (result) {
+        viewModel.closeIpaqPage();
+      },
     );
   }
 }
