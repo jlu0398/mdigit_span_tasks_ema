@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  iconify_flutter: ^0.0.7
+
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   digit_span_tasks:

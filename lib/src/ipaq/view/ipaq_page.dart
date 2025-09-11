@@ -12,6 +12,7 @@ class IPAQPage extends StatelessWidget {
     return CustomTaskWidget(
       task: viewModel.task,
       onSubmit: (result) {
+        viewModel.saveData(result);
         viewModel.closeIpaqPage();
       },
     );
